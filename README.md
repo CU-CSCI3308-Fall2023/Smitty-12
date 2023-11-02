@@ -1,2 +1,8 @@
 # Smitty-12
-Group 1  Recitation 12 software dev project 
+Application Description:
+Contributors: 
+Tech Stack:
+Pre requisites: 
+Instructions on how to run applications locally:
+How to run tests:
+Link to deployed application: 
