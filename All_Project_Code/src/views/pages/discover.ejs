@@ -1,0 +1,27 @@
+<%- include ('../partials/header') %> <%- include ('../partials/menu') %> 
+<div class="col"><%- include ('../partials/message') %></div>
+<main>
+  <div class="container">
+    <table class="table">
+        <tr>
+            <th>EVENTS</th>
+        </tr>
+        <% results.forEach(result => { %>
+            <tr>
+                <td><%= result.name %></td>
+                <td><img src=<%= result.images[0].url %> style="height:50px;"></img></td>
+                <td>
+                    <a style="text-decoration: none; color: black;" href=<%= result.url %>>
+                        <button class="btn btn-primary" style="padding:5px; margin: 0;">
+                            Book Now
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        <% }); %>
+    </table>
+</table>
+  </div>
+</main>
+
+<%- include ('../partials/footer') %>
