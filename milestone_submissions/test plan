@@ -8,7 +8,7 @@ Hashed Username/Email and password will compare to the table of users in the dat
 
 Register:
 	This feature posts information from the user and accesses the database to see if the username and password the user provided is there. If it isn’t we shall create a new user in the database and return the user back to the login page and prompt them to log in. If anything fails, we send an error message to the screen. The testing environment we will be using to test the feature is node. The test results should either come back as “register successful” or “register fail”. The acceptance criteria goes as follows: Name, Username/Email address, Password, Confirm Password.
-Hashed Username/Email and password will enter into the table of users in the database. If it doesn’t exist 
+Hashed Username/Email and password will enter into the table of users in the database. If it already exists, redirect the user to the login page.
 
 Add Profile:
 	This feature allows a user to make their own profile of information for potential roommates to see. It will be a page with input boxes so users can input their information. To create their profile they will click on a button that says save changes. If the test passes, return “profile made successfully. If it fails, return “failed to create user”. The acceptance criteria goes as follows: Name, Hobbies, Living Style, Number of preferred roommates/gender of roommates, optional biography, location.  
