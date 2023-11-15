@@ -2,7 +2,7 @@ Test plan:
 Unit Testing: Mocha and Chai
 Test cases: Login, Register,
 Test environment: VS Code, Google Chrome, Node 
-User Acceptance Testers: 
+
 Login:
 	Positive Test Case :  The user should be able to successfully login to the website if their login credentials are valid. 
 This test is to ensure that the login function works as we intended and users are able to gain access to the other features of the website.
