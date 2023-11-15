@@ -4,12 +4,12 @@ Test cases: Login, Register,
 Test environment: VS Code, Google Chrome, Node 
 
 Login:
-	Positive Test Case :  The user should be able to successfully login to the website if their login credentials are valid. 
+	Positive Test Case:  The user should be able to successfully login to the website if their login credentials are valid. 
 This test is to ensure that the login function works as we intended and users are able to gain access to the other features of the website.
 
 Expected Test Result: Should send a redirect status 302 if credentials are actually stored.
 
-	Negative Test Case : Checks to make sure that our system correctly handles incomplete login submissions for users attempting to login. 
+	Negative Test Case: Checks to make sure that our system correctly handles incomplete login submissions for users attempting to login. 
 The goal is the user cannot login without first providing all essential information which would be the username and password.
 
 Expected Test Result: The user should see an error message and the page should stay on login.
@@ -24,5 +24,10 @@ Expected Test Result: The user is redirected to the login page so they can login
 database. The user should be prompted to enter a new username or password and the page does not redirect to the login page until a unique username is provided.
 
 Expected Test Result: The system should stay on the register page with an error about duplicate usernames showing up.
-	
+
+Discover:
+	Positive Test Case: When successfully logged in the user the discover page presents users with information about potential roommates. This test is to 
+ensure users can explore suitable roomates that fit their needs. 
+
+Expected Test Result: The user should be able to see a list of places looking for roommates.
 
