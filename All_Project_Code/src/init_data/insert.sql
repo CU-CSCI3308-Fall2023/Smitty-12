@@ -1,1 +1,21 @@
 INSERT INTO users (username, password) VALUES ('JohnDoe', '123');
+INSERT INTO users (username, password) VALUES ('JaneSmith', 'password123');
+INSERT INTO users (username, password) VALUES ('BobJohnson', 'qwerty');
+INSERT INTO users (username, password) VALUES ('AliceJones', 'abc123');
+INSERT INTO users (username, password) VALUES ('DavidBrown', 'letmein');
+INSERT INTO users (username, password) VALUES ('EmilyDavis', 'pass1234');
+INSERT INTO users (username, password) VALUES ('CharlieWhite', 'securepassword');
+INSERT INTO users (username, password) VALUES ('EvaGreen', 'userpass');
+INSERT INTO users (username, password) VALUES ('FrankMiller', '12345678');
+INSERT INTO users (username, password) VALUES ('GraceTaylor', 'password!');
+INSERT INTO users (username, password) VALUES ('HenryClark', 'welcome123');
+INSERT INTO users (username, password) VALUES ('IsabelLee', 'ilovecoding');
+INSERT INTO users (username, password) VALUES ('JackWilliams', 'password321');
+INSERT INTO users (username, password) VALUES ('KarenMoore', 'user1234');
+INSERT INTO users (username, password) VALUES ('LeoScott', 'p@ssw0rd');
+INSERT INTO users (username, password) VALUES ('MiaHall', 'mypassword');
+INSERT INTO users (username, password) VALUES ('NathanWoods', 'test123');
+INSERT INTO users (username, password) VALUES ('OliviaKing', 'securepass');
+INSERT INTO users (username, password) VALUES ('PeterAdams', 'passpass');
+INSERT INTO users (username, password) VALUES ('QuinnMiller', '1234abcd');
+
