@@ -26,3 +26,4 @@ CREATE TABLE IF NOT EXISTS photos{
     photo_4 NOT NULL,
     photo_5 NOT NULL
 };
+
