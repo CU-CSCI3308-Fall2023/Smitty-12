@@ -71,7 +71,11 @@ app.use('/resources/public/', express.static('./resources/public'));
 // });
 
 app.get("/", (req, res) => {
-    res.render("pages/login");
+    res.render("pages/home");
+});
+
+app.get("/home", (req, res) => {
+    res.render("pages/home");
 });
 
 app.get("/login", (req, res) => {
