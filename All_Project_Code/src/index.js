@@ -16,24 +16,24 @@ const axios = require('axios'); // To make HTTP requests from our server. We'll 
 
 // database configuration
 const dbConfig = {
-  host: 'db', // the database server
-  port: 5432, // the database port
-  database: process.env.POSTGRES_DB, // the database name
-  user: process.env.POSTGRES_USER, // the user account to connect with
-  password: process.env.POSTGRES_PASSWORD, // the password of the user account
+    host: 'db', // the database server
+    port: 5432, // the database port
+    database: process.env.POSTGRES_DB, // the database name
+    user: process.env.POSTGRES_USER, // the user account to connect with
+    password: process.env.POSTGRES_PASSWORD, // the password of the user account
 };
 
 const db = pgp(dbConfig);
 
 // test your database
 db.connect()
-  .then(obj => {
-    console.log('Database connection successful'); // you can view this message in the docker compose logs
-    obj.done(); // success, release the connection;
-  })
-  .catch(error => {
-    console.log('ERROR:', error.message || error);
-  });
+    .then(obj => {
+        console.log('Database connection successful'); // you can view this message in the docker compose logs
+        obj.done(); // success, release the connection;
+    })
+    .catch(error => {
+        console.log('ERROR:', error.message || error);
+    });
 
 // *****************************************************
 // <!-- Section 3 : App Settings -->
@@ -44,17 +44,17 @@ app.use(bodyParser.json()); // specify the usage of JSON for parsing request bod
 
 // initialize session variables
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    saveUninitialized: false,
-    resave: false,
-  })
+    session({
+        secret: process.env.SESSION_SECRET,
+        saveUninitialized: false,
+        resave: false,
+    })
 );
 
 app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
+    bodyParser.urlencoded({
+        extended: true,
+    })
 );
 
 // *****************************************************
@@ -62,126 +62,132 @@ app.use(
 // *****************************************************
 
 // TODO - Include your API routes here
-app.get('/', (req, res) => {
-    res.redirect('/login'); //this will call the /anotherRoute route in the API
-  });
-  
-app.get('/login', (req, res) => {
-    res.render('pages/login');
-  });
 
-app.get('/register', async (req, res) => {
-    res.render('pages/register');
-  });
+// app.get('/home', (req, res) => {
+//     res.redirect('/anotherRoute'); //this will call the /anotherRoute route in the API
+// });
 
-  app.post('/register', async (req, res) => {
+app.get("/", (req, res) => {
+    res.render("pages/login");
+});
 
-    console.log('username: ', req.body.username);
-    console.log('password ', req.body.password);
-    // Hash the password using bcrypt library
+app.get("/login", (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    res.render("pages/login");
+});
+
+app.get("/create", (req, res) => {
+    res.render("pages/create");
+});
+
+//Register
+app.get("/register", (req, res) => {
+    res.render("pages/register");
+});
+
+// Login submission
+app.post("/login", async (req, res) => {
+    const userq = 'select * from users where username = $1'
+    const userm = await db.any(userq, [req.body.username]);
+    if (userm.length == 0) {
+        res.redirect("./register");
+    }
+    else if (userm.error) {
+        res.render("pages/login", { message: "wrong username or password" });
+    }
+    else {
+        req.session.user = userm[0];
+        req.session.save();
+        res.redirect("/discover");
+    }
+
+});
+
+// Register
+app.post('/register', async (req, res) => {
+    //hash the password using bcrypt library
     const hash = await bcrypt.hash(req.body.password, 10);
-    console.log('hash: ', hash);
-  
-    try {
-      // Insert the username and hashed password into the 'users' table if the username is not already in the table.
-      // This uses an "INSERT ON CONFLICT" query to handle duplicates.
-      await db.none(
-        'INSERT INTO users (username, password) VALUES ($1, $2) ON CONFLICT (username) DO NOTHING',
-        [req.body.username, hash]
-      );
-      // Redirect to GET /login route page after successful insertion
-      await res.redirect('/login');
-      console.log('now redirecting to login with username: ');
-    } 
-    catch (error) {
-      // Handle the case where the insertion fails
-      console.error('Error inserting into the database:', error);
-      // Redirect to GET /register route or display an error page
-      res.redirect('/register'); 
-      console.log('now redirecting to register');
-    }
-  });
-  
-  app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-  
-    try {
-      // Find the user from the 'users' table based on the entered username
-      const user = await db.any('SELECT * FROM users WHERE username = $1', username);
-  
-      if (user.length === 0) {
-        // If the user is not found in the database, redirect to the registration page.
-        res.redirect('/register');
-      } else {
-        // Use bcrypt.compare to compare the entered password with the stored hashed password.
-        const passwordMatch = await bcrypt.compare(password, user[0].password);
-  
-        if (passwordMatch) {
-          // If the password matches, save the user details in the session.
-          req.session.user = user[0];
-          req.session.save();
-  
-          // Redirect to the /discover route or any other authenticated route.
-          res.redirect('/discover');
-        } else {
-          // If the password is incorrect, throw an error.
-          throw new Error('Incorrect username or password.');
+    if (hash) {
+        var quer = `insert into users (username,password) values ($1,$2)`;
+        const quer2 = await db.any(quer, [req.body.username, hash]);
+        if (quer2.err) {
+            res.redirect('/register')
         }
-      }
-    } catch (error) {
-      console.error('Database error:', error);
-      // Send an appropriate message to the user and render the login.ejs page.
-      res.render('pages/login', { error: 'An error occurred while processing your request.' });
+        else {
+            res.redirect('/login')
+        }
     }
-  });
+    else {
+        console.log('error hashing the browns')
+    }
+});
 
-    // Authentication Middleware.
-    const auth = (req, res, next) => {
-      if (!req.session.user) {
-        // Default to login page.
-        return res.redirect('/login');
-      }
-      next();
-    };
+app.post('/make_profile', async (req, res) => {
+    var bio = req.body.bio;
+    var location = req.body.bio;
+    var age = req.body.bio;
+    var age_range = req.body.bio;
+    var sex = req.body.bio;
+    var pets = req.body.bio;
+    var budget = req.body.bio;
+    var quer = `insert into Account_Detail (bio,location,age) values ($1,$2,$3)`;
+    const quer2 = await db.any(quer, [bio,location,age]);
+    var querytwo = `insert into Preferences (age-range,sex,pets,budget) values ($4,$5,$6,$7)`;
+    const query2 = await db.any(quer, [age_range,sex,pets,budget]);
+    if (quer2.err || query2.err) {
+        console.log("error bruh")
+    }
+    else {
+        res.redirect('/discover')
+    }
+});
 
-    // Authentication Required
-    app.use(auth);
-  
+// Authentication Middleware.
+const auth = (req, res, next) => {
+    if (!req.session.user) {
+        // Default to register page.
+        return res.redirect('/register');
+    }
+    next();
+};
 
-app.get("/discover", (req,res) => {
-  axios({
-      url: `https://app.ticketmaster.com/discovery/v2/events.json`,
-      method: 'GET',
-      dataType: 'json',
-      headers: {
-        'Accept-Encoding': 'application/json',
-      },
-      params: {
-        apikey: process.env.API_KEY,
-        keyword: 'Tyler Childers', //you can choose any artist/event here
-        size: 6 // you can choose the number of events you would like to return
-      },
+// Authentication Required
+app.use(auth);
+
+app.get('/discover', (req, res) => {
+    axios({
+        url: `https://app.ticketmaster.com/discovery/v2/events.json`,
+        method: 'GET',
+        dataType: 'json',
+        params: {
+            "apikey": process.env.API_KEY,
+            "keyword": "Drake", //you can choose any artist/event here
+            "size": 10,
+        }
     })
-      .then(results => {
-        console.log(results.data); // the results will be displayed on the terminal if the docker containers are running // Send some parameters
-        res.render('pages/discover', {results:results.data._embedded.events});
-        
-      })
-      .catch(error => {
-        console.error('Ticketmaster Error: failed to retrieve information', error);
-        // Handle errors
-  });
-})
+        .then(results => {
+            // console.log(results.data._embedded.events[0]); // the results will be displayed on the terminal if the docker containers are running
+            // Send some parameters
+            res.render("pages/discover", { results: results.data._embedded.events })
+        })
+        .catch(error => {
+            console.log(error)
+            res.render("pages/discover", { results: [] })
+            // Handle errors
+        })
+});
 
 
-  app.get("/logout", (req, res) => {
+app.get("/logout", (req, res) => {
     req.session.destroy();
     res.render("pages/logout");
-  });
+});
 
 // *****************************************************
 // <!-- Section 5 : Start Server-->
 // *****************************************************
 // starting the server and keeping the connection open to listen for more requests
-app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');

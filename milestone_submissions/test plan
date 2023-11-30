@@ -1,15 +1,33 @@
 Test plan: 
 Unit Testing: Mocha and Chai
-Test cases: Login, Register, Add Profile
+Test cases: Login, Register,
 Test environment: VS Code, Google Chrome, Node 
+
 Login:
-	This feature posts information from the user and accesses the database to see if the username and password the user provided is there. If it is we shall return the home page, if not we redirect the user to the registration page. The testing environment we will be using to test the feature is node. The test results should either come back as “login successful” or “login fail”. The acceptance criteria goes as follows: Username/Email address and Password.
-Hashed Username/Email and password will compare to the table of users in the database
+	Positive Test Case:  The user should be able to successfully login to the website if their login credentials are valid. 
+This test is to ensure that the login function works as we intended and users are able to gain access to the other features of the website.
+
+Expected Test Result: Should send a redirect status 302 if credentials are actually stored.
+
+	Negative Test Case: Checks to make sure that our system correctly handles incomplete login submissions for users attempting to login. 
+The goal is the user cannot login without first providing all essential information which would be the username and password.
+
+Expected Test Result: The user should see an error message and the page should stay on login.
 
 Register:
-	This feature posts information from the user and accesses the database to see if the username and password the user provided is there. If it isn’t we shall create a new user in the database and return the user back to the login page and prompt them to log in. If anything fails, we send an error message to the screen. The testing environment we will be using to test the feature is node. The test results should either come back as “register successful” or “register fail”. The acceptance criteria goes as follows: Name, Username/Email address, Password, Confirm Password.
-Hashed Username/Email and password will enter into the table of users in the database. If it already exists, redirect the user to the login page.
+	Positive Test Case: This test case is to confirm that a user can successfully register a new account into the database, if the register is successful then the user 
+should be redirected to the login page. This test case is designed to check if someone is actually inserting a new account into our database of users. 
 
-Add Profile:
-	This feature allows a user to make their own profile of information for potential roommates to see. It will be a page with input boxes so users can input their information. To create their profile they will click on a button that says save changes. If the test passes, return “profile made successfully. If it fails, return “failed to create user”. The acceptance criteria goes as follows: Name, Hobbies, Living Style, Number of preferred roommates/gender of roommates, optional biography, location.  
-The information will go in the user_info table in the database. There will be a connection between users and user_info. 
+Expected Test Result: The user is redirected to the login page so they can login once the registration is successful.
+
+	Negative Test Case: The goal of this test case is to ensure the system properly handles the case of a user registering with a username that already exists in the
+database. The user should be prompted to enter a new username or password and the page does not redirect to the login page until a unique username is provided.
+
+Expected Test Result: The system should stay on the register page with an error about duplicate usernames showing up.
+
+Discover:
+	Positive Test Case: When successfully logged in the user the discover page presents users with information about potential roommates. This test is to 
+ensure users can explore suitable roomates that fit their needs. 
+
+Expected Test Result: The user should be able to see a list of places looking for roommates.
+
