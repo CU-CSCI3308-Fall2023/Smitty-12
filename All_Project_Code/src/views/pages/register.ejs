@@ -11,11 +11,20 @@
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
           <input type="password" class="form-control" id="password" name="password" required>
+      </div>
+        <div class="mb-3">
+          <label for="first_name" class="form-label">First Name</label>
+            <input type="text" name="first_name" id="first_name" class="form-control" required>
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" name="last_name" id="last_name" class="form-control" required>
+            <label for="bio" class="form-label">Bio</label>
+            <input type="text" name="bio" id="bio" class="form-control" required>
+            <label for="location" class="form-label">Location</label>
+            <input type="text" name="location" id="location" class="form-control" required>
+            <label for="age" class="form-label">Age</label>
+            <input type="text" name="age" id="age" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-        <p>If you already have an account, <a href="/login">Login</a></p>
-    </div>
+      <input type="submit" value="Register Now" />
   </main>
 
 <%- include ('../partials/footer') %>
