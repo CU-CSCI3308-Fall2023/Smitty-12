@@ -78,7 +78,7 @@ app.get("/login", (req, res) => {
     res.render("pages/login");
 });
 
-app.get("/create", (req, res) => {
+app.get("/preferences", (req, res) => {
     res.render("pages/create");
 });
 
@@ -107,20 +107,33 @@ app.post("/login", async (req, res) => {
 
 // Register
 app.post('/register', async (req, res) => {
-    //hash the password using bcrypt library
-    const hash = await bcrypt.hash(req.body.password, 10);
-    if (hash) {
-        var quer = `insert into users (username,password) values ($1,$2)`;
-        const quer2 = await db.any(quer, [req.body.username, hash]);
-        if (quer2.err) {
-            res.redirect('/register')
+    try {
+        // Hash the password using bcrypt library
+        const hash = await bcrypt.hash(req.body.password, 10);
+
+        if (hash) {
+            const query = `
+                INSERT INTO users (
+                    username, password, first_name, last_name, bio, 
+                    location, age, photo_id, preferences_id
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            `;
+
+            const queryParams = [
+                req.body.username, hash, req.body.first_name, req.body.last_name,
+                req.body.bio, req.body.location, req.body.age, req.body.photo_id,
+                req.body.preferences_id
+            ];
+
+            await db.any(query, queryParams);
+            res.redirect('/login');
+        } else {
+            console.log('Error hashing the password');
+            res.redirect('/register');
         }
-        else {
-            res.redirect('/login')
-        }
-    }
-    else {
-        console.log('error hashing the browns')
+    } catch (error) {
+        console.error('Error in registration:', error);
+        res.redirect('/register');
     }
 });
 
@@ -154,30 +167,62 @@ const auth = (req, res, next) => {
 };
 
 // Authentication Required
-app.use(auth);
+// app.use(auth);
 
-app.get('/discover', (req, res) => {
-    axios({
-        url: `https://app.ticketmaster.com/discovery/v2/events.json`,
-        method: 'GET',
-        dataType: 'json',
-        params: {
-            "apikey": process.env.API_KEY,
-            "keyword": "Drake", //you can choose any artist/event here
-            "size": 10,
-        }
-    })
-        .then(results => {
-            // console.log(results.data._embedded.events[0]); // the results will be displayed on the terminal if the docker containers are running
-            // Send some parameters
-            res.render("pages/discover", { results: results.data._embedded.events })
-        })
-        .catch(error => {
-            console.log(error)
-            res.render("pages/discover", { results: [] })
-            // Handle errors
-        })
+// app.get('/discover', (req, res) => {
+//     axios({
+//         url: `https://app.ticketmaster.com/discovery/v2/events.json`,
+//         method: 'GET',
+//         dataType: 'json',
+//         params: {
+//             "apikey": process.env.API_KEY,
+//             "keyword": "Drake", //you can choose any artist/event here
+//             "size": 10,
+//         }
+//     })
+//         .then(results => {
+//             // console.log(results.data._embedded.events[0]); // the results will be displayed on the terminal if the docker containers are running
+//             // Send some parameters
+//             res.render("pages/discover", { results: results.data._embedded.events })
+//         })
+//         .catch(error => {
+//             console.log(error)
+//             res.render("pages/discover", { results: [] })
+//             // Handle errors
+//         })
+// });
+
+app.get('/discover', async (req, res) => {
+    try {
+        const query = 'SELECT * FROM users';
+        const allUsers = await db.any(query);
+
+        // Render or send the allUsers data as needed
+        res.render('pages/discover', { results: allUsers });
+    } catch (error) {
+        console.error('Error fetching all users:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
+
+app.get('/user/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const query = 'SELECT * FROM users WHERE user_id = $1';
+        const user = await db.oneOrNone(query, [userId]);
+
+        if (user) {
+            // Render or send the user data as needed
+            res.json(user);
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 
 app.get("/logout", (req, res) => {
