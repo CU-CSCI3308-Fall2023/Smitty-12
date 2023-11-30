@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS users (
    user_id INTEGER PRIMARY KEY,
    username VARCHAR NOT NULL,
    password VARCHAR NOT NULL,
+   first_name  VARCHAR NOT NULL,
+   last_name VARCHAR NOT NULL, 
    bio VARCHAR NOT NULL,
    location VARCHAR NOT NULL,
    age INTEGER NOT NULL,
