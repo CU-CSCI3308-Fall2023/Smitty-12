@@ -78,6 +78,10 @@ app.get("/login", (req, res) => {
     res.render("pages/login");
 });
 
+app.get("/create", (req, res) => {
+    res.render("pages/create");
+});
+
 //Register
 app.get("/register", (req, res) => {
     res.render("pages/register");
@@ -120,6 +124,25 @@ app.post('/register', async (req, res) => {
     }
 });
 
+app.post('/make_profile', async (req, res) => {
+    var bio = req.body.bio;
+    var location = req.body.bio;
+    var age = req.body.bio;
+    var age_range = req.body.bio;
+    var sex = req.body.bio;
+    var pets = req.body.bio;
+    var budget = req.body.bio;
+    var quer = `insert into Account_Detail (bio,location,age) values ($1,$2,$3)`;
+    const quer2 = await db.any(quer, [bio,location,age]);
+    var querytwo = `insert into Preferences (age-range,sex,pets,budget) values ($4,$5,$6,$7)`;
+    const query2 = await db.any(quer, [age_range,sex,pets,budget]);
+    if (quer2.err || query2.err) {
+        console.log("error bruh")
+    }
+    else {
+        res.redirect('/discover')
+    }
+});
 
 // Authentication Middleware.
 const auth = (req, res, next) => {
