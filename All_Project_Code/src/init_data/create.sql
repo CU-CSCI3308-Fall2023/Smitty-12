@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
-    username VARCHAR(50) PRIMARY KEY,
+    user_id PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
     password VArCHAR(60) NOT NULL,
     bio VARCHAR(50) NOT NULL,
     location VARCHAR(60) NOT NULL,
@@ -25,3 +26,10 @@ CREATE TABLE IF NOT EXISTS preferences {
     budget INTEGER
 };
 
+CREATE TABLE IF NOT EXISTS matches (
+    match_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id_from INT,
+    user_id_to INT,
+    FOREIGN KEY (user_id_from) REFERENCES Users(user_id),
+    FOREIGN KEY (user_id_to) REFERENCES Users(user_id)
+);
