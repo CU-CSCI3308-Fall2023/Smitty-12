@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS photos(
 );
 
 CREATE TABLE IF NOT EXISTS users (
-   user_id ISERIAL PRIMARY KEY,
+   user_id SERIAL PRIMARY KEY,
    username VARCHAR NOT NULL,
    password VARCHAR NOT NULL,
    first_name  VARCHAR NOT NULL,
