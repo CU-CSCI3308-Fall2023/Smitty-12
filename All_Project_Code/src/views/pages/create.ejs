@@ -1,0 +1,46 @@
+<%- include ('../partials/header') %> <%- include ('../partials/menu') %>
+<main>
+    <style>
+        .formcontainer{
+            display: flex;
+            flex-direction: column;
+            width: 500px;
+            align-content: center;
+            margin: auto;
+        }
+        label, input{
+            margin-top: 10px;
+        }
+    </style>
+        <form class="formcontainer" action="/make_profile" method="POST">
+            <h1>Info</h1>
+            <hr>
+            <label for="bio">Bio</label>
+            <input type="text" name="bio" id="bio">
+            <label for="location">Location</label>
+            <input type="text" name="location" id="location">
+            <label for="age">Age</label>
+            <input type="text" name="age" id="age">
+            <h1>Preferences</h1>
+            <hr>
+            <label for="age-range">Age Range</label>
+            <input type="text" name="age-range" id="age-range">
+            <label for="sex">Roommate Gender</label>
+            <select name="sex" id="sex">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="nopref">No Preference</option>
+            </select>
+            <label for="pets">Pets</label>
+            <select name="pets" id="pets">
+                <option value="dogs">Dogs</option>
+                <option value="cats">Cats</option>
+                <option value="none">No Pets</option>
+            </select>
+            <label for="budget">Budget/Price Range</label>
+            <input type="text" name="budget" id="budget">
+            <input type="submit" value="Save Changes" />
+        </form>
+</main>
+
+<%- include ('../partials/footer') %>
