@@ -57,6 +57,9 @@ app.use(
     })
 );
 
+app.use('/resources/public/', express.static('./resources/public'));
+
+
 // *****************************************************
 // <!-- Section 4 : API Routes -->
 // *****************************************************
@@ -80,6 +83,10 @@ app.get("/login", (req, res) => {
 
 app.get("/preferences", (req, res) => {
     res.render("pages/create");
+});
+
+app.get("/matches", (req, res) => {
+    res.render("pages/matches");
 });
 
 //Register
@@ -224,7 +231,38 @@ app.get('/user/:userId', async (req, res) => {
 });
 
 
+// this section is for when someone likes you, you can see it and decide to like them back or not
+app.get('/liked_you', async (req, res) => {
+    const currentUserId = req.session.user.user_id;
+  
+    try {
+      const likedYouUserIds = await db.any(
+        `SELECT * FROM matches WHERE user_id_to = ${currentUserId}`
+      );
+  
+      res.json({ likedYouUserIds });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
+  // this is for the matches section where theres a both users like each other.
+app.get("/liked_back", async (req, res) => {
+    const currentUserId = req.session.user.user_id;
+
+    try {
+        const likedYouUserIds = await db.any(
+          `SELECT * user_id_from FROM matches WHERE user_id_to = ${currentUserId} AND user_id_to = ${currentUserId}`
+        );
+    
+        res.json({ likedYouUserIds });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+});
 app.get("/logout", (req, res) => {
     req.session.destroy();
     res.render("pages/logout");

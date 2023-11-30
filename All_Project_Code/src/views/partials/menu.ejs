@@ -1,3 +1,16 @@
+<style>
+    .navbar {
+        background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0), rgba(255, 111, 97, 0));
+        border-bottom: 2px solid rgba(255, 111, 97, 0);
+    }
+
+    .navbar a {
+        color: #FF6B6B; /* Set the text color to Tinder color */
+        font-weight: bold;
+        max-height: 70px;
+    }
+</style>
+
 <header>
     <nav class="navbar navbar-expand-sm border-bottom">
         <div class="container">
@@ -7,13 +20,21 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbar-collapse">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav me-auto align-items-center">
+                    <li>
+                    <a class="navbar-brand" href="/home">
+                        <img src="../../resources/public/rinder logo.png" alt="rinder" style="max-height: 70px;">
+                    </a>
+                    </li>
                     <li class="nav-item">
                         <!-- TO-DO: For Discover, add a <a> tag with an attribute href to call the '/discover' API -->
                         <a class="nav-link" href="/discover">DISCOVER</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/preferences">PREFERENCES</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/matches">MATCHES</a>
                     </li>
                 </ul>
                 <div class="nav-item me-1">
