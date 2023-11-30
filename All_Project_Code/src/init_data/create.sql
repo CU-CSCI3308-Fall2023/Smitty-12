@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS preferences(
    budget INTEGER NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS photos(
    photo_id INTEGER PRIMARY KEY,
    photo_1 VARCHAR NOT NULL,
@@ -36,4 +35,3 @@ CREATE TABLE IF NOT EXISTS matches (
     FOREIGN KEY (user_id_from) REFERENCES users (user_id),
     FOREIGN KEY (user_id_to) REFERENCES users (user_id)
 );
-
