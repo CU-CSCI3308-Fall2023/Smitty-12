@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS preferences(
-   preferences_id INTEGER PRIMARY KEY,
+   preferences_id SERIAL PRIMARY KEY,
    age_range INTEGER NOT NULL,
    sex VARCHAR NOT NULL,
    pets INTEGER NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS preferences(
 );
 
 CREATE TABLE IF NOT EXISTS photos(
-   photo_id INTEGER PRIMARY KEY,
+   photo_id SERIAL PRIMARY KEY,
    photo_1 VARCHAR NOT NULL,
    photo_2 VARCHAR NOT NULL,
    photo_3 VARCHAR NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS photos(
 );
 
 CREATE TABLE IF NOT EXISTS users (
-   user_id INTEGER PRIMARY KEY,
+   user_id SERIAL PRIMARY KEY,
    username VARCHAR NOT NULL,
    password VARCHAR NOT NULL,
    first_name  VARCHAR NOT NULL,
