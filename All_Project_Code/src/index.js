@@ -218,8 +218,12 @@ app.get('/users', async (req, res) => {
 
 app.get('/discover', async (req, res) => {
     try {
-        // Make the AJAX request to the provided URL
-        const response = await axios.get('https://randomuser.me/api/?results=100');
+        // Append a timestamp to the API request URL
+        const timestamp = new Date().getTime();
+        const apiUrl = `https://randomuser.me/api/?results=100&timestamp=${timestamp}`;
+
+        // Make the AJAX request to the modified URL
+        const response = await axios.get(apiUrl);
 
         // Extract the data from the response
         const userData = response.data.results;
@@ -233,6 +237,7 @@ app.get('/discover', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 app.get('/user/:userId', async (req, res) => {
     try {
@@ -262,7 +267,8 @@ app.get('/liked_you', async (req, res) => {
         `SELECT * FROM matches WHERE user_id_to = ${currentUserId}`
       );
   
-      res.json({ likedYouUserIds });
+      res.render('pages/matches', { results: likedYouUserIds });
+      console.log(likedYouUserIds);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
