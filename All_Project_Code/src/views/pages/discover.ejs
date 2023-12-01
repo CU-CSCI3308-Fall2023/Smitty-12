@@ -63,6 +63,8 @@
     }
     
     </style>
+              <body>
+
   <div class="container">
     <table class="table">
         <tr>
@@ -70,50 +72,77 @@
         </tr>
         <% results.forEach(result => { %>
           <tr>
-              <td><%= result.first_name %></td>
-              <body>
+              <td><%= result.name.first %></td>
+              <td>
+                <button class="openModalBtn" data-user-id="<%= result.user_id %>" onclick="openModal('<%= result.name.first %>', '<%= result.name.last %>', '<%= result.dob.age %>', '<%= result.location.city %>', '<%= result.location.country %>', '<%= result.gender %>', '<%= result.picture.large %>', '<%= result.email %>')">Open Modal</button>
+              </td>
                   <!-- Trigger/Open The Modal -->
-                  <button class="openModalBtn" data-user-id="<%= result.user_id %>">Open Modal</button>
-      
+                  
+      <!-- //results.foreach(r.gend) -->
                   <!-- The Modal -->
-                  <div id="myModal_<%= result.user_id %>" class="modal">
+                  <div id="myModal" class="modal">
                       <!-- Modal content -->
                       <div class="modal-content">
-                          <span class="close" data-user-id="<%= result.user_id %>">&times;</span>
+                          <span class="close" data-user-id="<%= result.user_id %> ">&times;</span>
                           <div class="modal-content-div">
                               <div class="name-img">
-                                  <img class="pfpimg" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="">
+                                  <img id="pic" src="<%= result.picture.large %>" alt="">
                               </div>
                               <div class="info">
-                                  <h1><%= result.first_name %> <%= result.last_name %></h1>
+                                  <!-- <h1><%= result.name.first %> <%= result.name.last %></h1> -->
                                   <hr>
                                   <p><%= result.bio %></p>
                                   <ul>
-                                      <li>Age-Range:</li>
-                                      <li>Location:</li>
-                                      <li>Sex:</li>
-                                      <li>Pets:</li>
+                                      <li id ="first">First Name: <%= result.name.first %> </li>
+                                      <li id ="last">Last Name: <%= result.name.last %> </li>
+                                      <li id ="age">Age: <%= result.dob.age %> </li>
+                                      <li id="city">City: <%= result.location.city %> <p></li>
+                                      <li id="country">Country: <%= result.location.country %> <p></li>
+                                      <li id="gender">Sex: <%= result.gender%> </li>
+                                      <li id="email">Email: <%= result.email %> </li>
                                   </ul>
                               </div>
                           </div>
                       </div>
                   </div>
-              </body>
           </tr>
       <% }) %>
+    </body>
       
       <script>
-          document.addEventListener('DOMContentLoaded', function () {
-              const openModalButtons = document.querySelectorAll('.openModalBtn');
-              const closeButtons = document.querySelectorAll('.close');
-      
-              openModalButtons.forEach(button => {
-                  button.addEventListener('click', function () {
-                      const userId = this.getAttribute('data-user-id');
-                      const modal = document.getElementById(`myModal_${userId}`);
-                      modal.style.display = 'block';
-                  });
+        function openModal(first, last, age, city, country, gender, pic, email){
+          console.log(first)
+          document.getElementById('first').innerHTML = first
+          document.getElementById('last').innerHTML = last
+          document.getElementById('age').innerHTML = age
+          document.getElementById('city').innerHTML = city
+          document.getElementById('country').innerHTML = country
+          document.getElementById('gender').innerHTML = gender
+          document.getElementById('pic').innerHTML = pic
+          document.getElementById('email').innerHTML = email
+          const modal = document.getElementById(`myModal`);
+          const closeButtons = document.querySelectorAll('.close');
+          closeButtons.forEach(button => {
+              button.addEventListener('click', function () {
+                  const userId = this.getAttribute('data-user-id');
+                  const modal = document.getElementById(`myModal`);
+                  modal.style.display = 'none';
               });
+          });
+          modal.style.display = 'block';
+        }
+
+          // document.addEventListener('DOMContentLoaded', function () {
+          //     const openModalButtons = document.querySelectorAll('.openModalBtn');
+          //     const closeButtons = document.querySelectorAll('.close');
+      
+          //     openModalButtons.forEach(button => {
+          //         button.addEventListener('click', function () {
+          //             const userId = this.getAttribute('data-user-id');
+          //             const modal = document.getElementById(`myModal_${userId}`);
+          //             modal.style.display = 'block';
+          //         });
+          //     });
       
               closeButtons.forEach(button => {
                   button.addEventListener('click', function () {
@@ -122,7 +151,7 @@
                       modal.style.display = 'none';
                   });
               });
-          });
+          // });
       </script>
       
     </table>
