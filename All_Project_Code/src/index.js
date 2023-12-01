@@ -57,7 +57,7 @@ app.use(
     })
 );
 
-app.use('/resources/public/', express.static('./resources/public'));
+app.use('/resources/public/', express.static('./resources/public')); // this allows local images in public to be used
 
 
 // *****************************************************
@@ -148,39 +148,21 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/make_profile', async (req, res) => {
-    // Assuming you have a session with user information, and the user ID is stored in req.session.userId
-    var userId = req.session.userId;
-
-    var age_range = req.body.age_range;
-    var sex = req.body.sex;
-    var pets = req.body.pets;
-    var budget = req.body.budget;
+app.post('/update_preferences', async (req, res) => {
+    const { ageRange, sex, pets, budget } = req.body;
+    const currentUserId = req.session.user.user_id;
 
     try {
-        // Step 1: Insert preferences
-        var preferencesQuery = `
-            INSERT INTO Preferences (age_range, sex, pets, budget)
-            VALUES ($1, $2, $3, $4)
-            RETURNING preferences_id
-        `;
+        // Update preferences in the preferences table for the current user
+        await db.none(
+            `UPDATE preferences SET age_range = $1, sex = $2, pets = $3, budget = $4 WHERE preferences_id = (SELECT preferences_id FROM users WHERE user_id = $5)`,
+            [ageRange, sex, pets, budget, currentUserId]
+        );
 
-        const preferencesResult = await db.one(preferencesQuery, [age_range, sex, pets, budget]);
-        var preferencesId = preferencesResult.preferences_id;
-
-        // Step 2: Update user with preferences_id
-        var updateUserQuery = `
-            UPDATE Users
-            SET preferences_id = $1
-            WHERE user_id = $2
-        `;
-
-        await db.none(updateUserQuery, [preferencesId, userId]);
-
-        res.redirect('/discover');
+        res.status(200).json({ message: 'Preferences updated' });
     } catch (error) {
-        console.error("Error:", error);
-        res.status(500).send("Internal Server Error");
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
