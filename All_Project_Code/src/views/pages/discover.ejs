@@ -86,21 +86,46 @@
                           <span class="close" data-user-id="<%= result.user_id %> ">&times;</span>
                           <div class="modal-content-div">
                               <div class="name-img">
-                                  <img id="pic" src="<%= result.picture.large %>" alt="">
+                                  <img id="pic" src="<%= result.picture.large %>" alt="" class="">
                               </div>
                               <div class="info">
                                   <!-- <h1><%= result.name.first %> <%= result.name.last %></h1> -->
                                   <hr>
                                   <p><%= result.bio %></p>
-                                  <ul>
-                                      <li id ="first">First Name: <%= result.name.first %> </li>
-                                      <li id ="last">Last Name: <%= result.name.last %> </li>
-                                      <li id ="age">Age: <%= result.dob.age %> </li>
-                                      <li id="city">City: <%= result.location.city %> <p></li>
-                                      <li id="country">Country: <%= result.location.country %> <p></li>
-                                      <li id="gender">Sex: <%= result.gender%> </li>
-                                      <li id="email">Email: <%= result.email %> </li>
-                                  </ul>
+                                  <div class="m-5">
+                                    <div class="d-flex flex-row">
+                                        <p>First Name: </p>
+                                        <p id ="first"><%= result.name.first %> </p>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <p>Last Name: </p>
+                                        <p id ="last"> <%= result.name.last %> </p>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <p>Age: </p>
+                                        <p id ="age"><%= result.dob.age %> </p>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <p>City: </p>
+                                        <p id="city"><%= result.location.city %> <p>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <p>Country: </p>
+                                        <p id="country"><%= result.location.country %> <p>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <p>Gender: </p>
+                                        <p id="gender"><%= result.gender%> </p>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <p>Email: </p>
+                                        <p id="email"><%= result.email %> </p>
+                                    </div>
+                                  </div>
+                                    
+                                  <form action="/like">
+                                    <button type="submit" action="/liked_back">Like</button>
+                                  </form>
                               </div>
                           </div>
                       </div>
@@ -110,17 +135,17 @@
     </body>
       
       <script>
-        function openModal(first, last, age, city, country, gender, pic, email){
-          console.log(first)
-          document.getElementById('first').innerHTML = first
-          document.getElementById('last').innerHTML = last
-          document.getElementById('age').innerHTML = age
-          document.getElementById('city').innerHTML = city
-          document.getElementById('country').innerHTML = country
-          document.getElementById('gender').innerHTML = gender
-          document.getElementById('pic').innerHTML = pic
-          document.getElementById('email').innerHTML = email
-          const modal = document.getElementById(`myModal`);
+        function openModal(firstName, lastName, age, city, country, gender, pic, email) {
+        document.getElementById('first').innerHTML = firstName;
+        document.getElementById('last').innerHTML = lastName;
+        document.getElementById('age').innerHTML = age;
+        document.getElementById('city').innerHTML = city;
+        document.getElementById('country').innerHTML = country;
+        document.getElementById('gender').innerHTML = gender;
+        document.getElementById('pic').src = pic;
+        document.getElementById('email').innerHTML = email;
+
+        const modal = document.getElementById('myModal');
           const closeButtons = document.querySelectorAll('.close');
           closeButtons.forEach(button => {
               button.addEventListener('click', function () {
@@ -129,8 +154,10 @@
                   modal.style.display = 'none';
               });
           });
-          modal.style.display = 'block';
-        }
+        modal.style.display = 'block';
+    }
+
+
 
           // document.addEventListener('DOMContentLoaded', function () {
           //     const openModalButtons = document.querySelectorAll('.openModalBtn');
