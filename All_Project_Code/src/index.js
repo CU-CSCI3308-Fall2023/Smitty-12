@@ -149,24 +149,42 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/make_profile', async (req, res) => {
-    var bio = req.body.bio;
-    var location = req.body.bio;
-    var age = req.body.bio;
-    var age_range = req.body.bio;
-    var sex = req.body.bio;
-    var pets = req.body.bio;
-    var budget = req.body.bio;
-    var quer = `insert into Account_Detail (bio,location,age) values ($1,$2,$3)`;
-    const quer2 = await db.any(quer, [bio,location,age]);
-    var querytwo = `insert into Preferences (age-range,sex,pets,budget) values ($4,$5,$6,$7)`;
-    const query2 = await db.any(quer, [age_range,sex,pets,budget]);
-    if (quer2.err || query2.err) {
-        console.log("error bruh")
-    }
-    else {
-        res.redirect('/discover')
+    // Assuming you have a session with user information, and the user ID is stored in req.session.userId
+    var userId = req.session.userId;
+
+    var age_range = req.body.age_range;
+    var sex = req.body.sex;
+    var pets = req.body.pets;
+    var budget = req.body.budget;
+
+    try {
+        // Step 1: Insert preferences
+        var preferencesQuery = `
+            INSERT INTO Preferences (age_range, sex, pets, budget)
+            VALUES ($1, $2, $3, $4)
+            RETURNING preferences_id
+        `;
+
+        const preferencesResult = await db.one(preferencesQuery, [age_range, sex, pets, budget]);
+        var preferencesId = preferencesResult.preferences_id;
+
+        // Step 2: Update user with preferences_id
+        var updateUserQuery = `
+            UPDATE Users
+            SET preferences_id = $1
+            WHERE user_id = $2
+        `;
+
+        await db.none(updateUserQuery, [preferencesId, userId]);
+
+        res.redirect('/discover');
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error");
     }
 });
+
+
 
 // Authentication Middleware.
 const auth = (req, res, next) => {
@@ -218,8 +236,12 @@ app.get('/users', async (req, res) => {
 
 app.get('/discover', async (req, res) => {
     try {
-        // Make the AJAX request to the provided URL
-        const response = await axios.get('https://randomuser.me/api/?results=100');
+        // Append a timestamp to the API request URL
+        const timestamp = new Date().getTime();
+        const apiUrl = `https://randomuser.me/api/?results=100&timestamp=${timestamp}`;
+
+        // Make the AJAX request to the modified URL
+        const response = await axios.get(apiUrl);
 
         // Extract the data from the response
         const userData = response.data.results;
@@ -233,6 +255,7 @@ app.get('/discover', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 app.get('/user/:userId', async (req, res) => {
     try {
@@ -262,7 +285,8 @@ app.get('/liked_you', async (req, res) => {
         `SELECT * FROM matches WHERE user_id_to = ${currentUserId}`
       );
   
-      res.json({ likedYouUserIds });
+      res.render('pages/matches', { results: likedYouUserIds });
+      console.log(likedYouUserIds);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -270,21 +294,22 @@ app.get('/liked_you', async (req, res) => {
   });
 
   // this is for the matches section where theres a both users like each other.
-app.get("/liked_back", async (req, res) => {
+  app.get("/liked_back", async (req, res) => {
     const currentUserId = req.session.user.user_id;
 
     try {
         const likedYouUserIds = await db.any(
-          `SELECT * user_id_from FROM matches WHERE user_id_to = ${currentUserId} AND user_id_to = ${currentUserId}`
+            `SELECT liker_user_id FROM matches WHERE liked_user_id = $1`,
+            [currentUserId]
         );
-    
-        res.json({ likedYouUserIds });
-      } catch (error) {
+        console.log(likedYouUserIds);
+        res.render('pages/matches', { results: likedYouUserIds });
+    } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
-      }
-
+    }
 });
+
 app.get("/logout", (req, res) => {
     req.session.destroy();
     res.render("pages/logout");
