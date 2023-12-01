@@ -74,7 +74,7 @@
               <body>
                   <!-- Trigger/Open The Modal -->
                   <button class="openModalBtn" data-user-id="<%= result.user_id %>">Open Modal</button>
-      
+                
                   <!-- The Modal -->
                   <div id="myModal_<%= result.user_id %>" class="modal">
                       <!-- Modal content -->
@@ -89,12 +89,15 @@
                                   <hr>
                                   <p><%= result.bio %></p>
                                   <ul>
-                                      <li>Age-Range:</li>
+                                      <li>Age-Range: <%= result.first_name %></li>
                                       <li>Location:</li>
                                       <li>Sex:</li>
                                       <li>Pets:</li>
                                   </ul>
                               </div>
+                              <form action="/liked_back">
+                                <button type="submit" action="/liked_back">Like</button>
+                              </form>
                           </div>
                       </div>
                   </div>
