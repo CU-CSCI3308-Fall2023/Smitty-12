@@ -203,15 +203,33 @@ const auth = (req, res, next) => {
 //         })
 // });
 
-app.get('/discover', async (req, res) => {
+app.get('/users', async (req, res) => {
     try {
         const query = 'SELECT * FROM users';
         const allUsers = await db.any(query);
 
         // Render or send the allUsers data as needed
-        res.render('pages/discover', { results: allUsers });
+        res.render('pages/users', { results: allUsers });
     } catch (error) {
         console.error('Error fetching all users:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/discover', async (req, res) => {
+    try {
+        // Make the AJAX request to the provided URL
+        const response = await axios.get('https://randomuser.me/api/?results=100');
+
+        // Extract the data from the response
+        const userData = response.data.results;
+        console.log(userData);
+
+        // Send the data back to the client
+        res.render('pages/discover', { results: userData });
+    } catch (error) {
+        // Handle any errors that might occur during the request
+        console.error('Error fetching data:', error.message);
         res.status(500).send('Internal Server Error');
     }
 });
