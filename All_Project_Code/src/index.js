@@ -195,7 +195,7 @@ app.post('/update_preferences', async (req, res) => {
             [ageRange, sex, pets, budget, currentUserId]
         );
 
-        res.status(200).json({ message: 'Preferences updated' });
+        res.redirect('/preferences');
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
