@@ -1,23 +1,63 @@
+<!-- login.ejs -->
+
 <%- include ('../partials/header') %> 
 <%- include ('../partials/menu') %>
 
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #fff;
+        margin: 0;
+        padding: 0;
+    }
+
+    #loginContainer {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 400px;
+        margin: auto;
+        margin-top: 50px;
+    }
+    label {
+      color: black;
+      font-weight: bold;
+    }
+    h1 {
+        color: #ff3b3f;
+        text-align: center;
+    }
+
+    button[type="submit"] {
+        background-color: #ff3b3f;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 100%;
+    }
+</style>
+
 <main>
-    <div class="container mt-5">
-      <h1 class="mb-4">Login</h1>
-      <form action="/login" method="post">
-        <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input type="text" class="form-control" id="username" name="username" required>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-      </form>
-        <p>If you do not have an account, <a href="/register">Register</a></p>
+    <div class="container" id = "loginContainer">
+        <h1>Login</h1>
+        <form action="/login" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p style = "font-weight: bold;">If you do not have an account, <a href="/register">Register</a></p>
     </div>
-  </main>
-        
+</main>
 
 <%- include ('../partials/footer') %>

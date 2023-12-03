@@ -1,31 +1,70 @@
-<%- include ('../partials/header') %> <%- include ('../partials/menu') %>
+<!-- register.ejs -->
+
+<%- include ('../partials/header') %> 
+<%- include ('../partials/menu') %>
+
+<style>
+    #registerContainer {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        max-width: 400px;
+        margin: auto;
+        margin-top: 50px;
+        margin-bottom: 50px; /* this is to allow space since footer covers the login link */
+    }
+    h1 {
+        color: #ff3b3f;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    label {
+        margin-top: 10px;
+        color: black;
+        font-weight: bold;
+    }
+    button[type="submit"] {
+        background-color: #ff3b3f;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 100%;
+    }
+</style>
 
 <main>
-    <div class="container mt-5">
-      <h1 class="mb-4">Register</h1>
-      <form action="/register" method="POST">
-        <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
-          <input type="text" class="form-control" id="username" name="username" required>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" required>
-      </div>
-        <div class="mb-3">
-          <label for="first_name" class="form-label">First Name</label>
-            <input type="text" name="first_name" id="first_name" class="form-control" required>
-            <label for="last_name" class="form-label">Last Name</label>
-            <input type="text" name="last_name" id="last_name" class="form-control" required>
-            <label for="bio" class="form-label">Bio</label>
-            <input type="text" name="bio" id="bio" class="form-control" required>
-            <label for="location" class="form-label">Location</label>
-            <input type="text" name="location" id="location" class="form-control" required>
-            <label for="age" class="form-label">Age</label>
-            <input type="text" name="age" id="age" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Register</button>
-        <p>If you do not have an account, <a href="/login">Login</a></p>
-  </main>
+    <div id="registerContainer">
+        <h1>Register</h1>
+        <form action="/register" method="POST">
+            <div class="mb-3">
+                <label for="username" class="form-label" id="usernameLabel">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label" id="passwordLabel">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="first_name" class="form-label" id="firstNameLabel">First Name</label>
+                <input type="text" name="first_name" id="first_name" class="form-control" required>
+                <label for="last_name" class="form-label" id="lastNameLabel">Last Name</label>
+                <input type="text" name="last_name" id="last_name" class="form-control" required>
+                <label for="bio" class="form-label" id="bioLabel">Bio</label>
+                <input type="text" name="bio" id="bio" class="form-control" required>
+                <label for="location" class="form-label" id="locationLabel">Location</label>
+                <input type="text" name="location" id="location" class="form-control" required>
+                <label for="age" class="form-label" id="ageLabel">Age</label>
+                <input type="text" name="age" id="age" class="form-control" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <p style = "font-weight: bold;">If you do not have an account, <a href="/login">Login</a></p>
+    </div>
+</main>
 
 <%- include ('../partials/footer') %>
