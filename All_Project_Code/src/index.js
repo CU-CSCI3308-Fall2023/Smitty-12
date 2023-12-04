@@ -240,16 +240,19 @@ const auth = (req, res, next) => {
 
 app.get('/users', async (req, res) => {
     try {
-        const query = 'SELECT * FROM users';
-        const allUsers = await db.any(query);
+        const query = 'SELECT * FROM users LEFT JOIN preferences ON users.preferences_id = preferences.preferences_id';
+        const usersWithPrefs = await db.any(query);
 
-        // Render or send the allUsers data as needed
-        res.render('pages/users', { results: allUsers });
+        console.log(usersWithPrefs);  // Add this line to log the data
+
+        res.render('pages/users', { results: usersWithPrefs });
     } catch (error) {
         console.error('Error fetching all users:', error);
         res.status(500).send('Internal Server Error');
     }
 });
+
+
 
 app.get('/discover', async (req, res) => {
     try {
