@@ -6,14 +6,22 @@
         <hr>
         <form class = "formcontainer" action = "/liked_you" method="GET">
         
-        
+        <% data["matched_with"].forEach(result => { %>
+
+            <h1><%= result.first_name %> <%= result.last_name %></h1>
+
+        <% }) %>
         </form>
         <br>
         <br>
         <h4> People who liked your profile:</h4>
         <hr>
         <form class = "formcontainer" action = "/liked_back" method="GET">
-        
+            <% data["likes_you"].forEach(result => { %>
+
+                <h1><%= result.first_name %> <%= result.last_name %></h1>
+
+            <% }) %>
         
         
         </form>
