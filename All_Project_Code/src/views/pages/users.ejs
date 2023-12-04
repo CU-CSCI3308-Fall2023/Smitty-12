@@ -1,0 +1,135 @@
+<%- include ('../partials/header') %> <%- include ('../partials/menu') %> 
+<div class="col"><%- include ('../partials/message') %></div>
+<main>
+  <style>
+    body {font-family: Arial, Helvetica, sans-serif;}
+    
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+    
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .modal-content-div{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: auto;
+    }
+    .name-img{
+        display: flex;
+        flex-direction: column;
+    }
+    .pfpimg{
+        width: 400px;
+        height: 400px;
+    }
+    .info{
+        display: flex;
+        flex-direction: column;
+        padding-left: 20px;
+    }
+    
+    </style>
+  <div class="container">
+    <table class="table">
+        <tr>
+            <th>PEOPLE</th>
+        </tr>
+        <% results.forEach(result => { %>
+          <tr>
+              <td><%= result.first_name %></td>
+              <body>
+                  <!-- Trigger/Open The Modal -->
+                  <button class="openModalBtn" data-user-id="<%= result.user_id %>">Open Modal</button>
+                
+                  <!-- The Modal -->
+                  <div id="myModal_<%= result.user_id %>" class="modal">
+                      <!-- Modal content -->
+                      <div class="modal-content">
+                          <span class="close" data-user-id="<%= result.user_id %>">&times;</span>
+                          <div class="modal-content-div">
+                              <div class="name-img">
+                                  <img class="pfpimg" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" alt="">
+                              </div>
+                              <div class="info">
+                                  <h1><%= result.first_name %> <%= result.last_name %></h1>
+                                  <hr>
+                                  <p><%= result.bio %></p>
+                                  <ul>
+                                      <li>Age-Range: <%= result.first_name %></li>
+                                      <li>Location:</li>
+                                      <li>Sex:</li>
+                                      <li>Pets:</li>
+                                  </ul>
+                              </div>
+                              <form action="/liked_back">
+                                <button type="submit" action="/liked_back">Like</button>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+              </body>
+          </tr>
+      <% }) %>
+      
+      <script>
+          document.addEventListener('DOMContentLoaded', function () {
+              const openModalButtons = document.querySelectorAll('.openModalBtn');
+              const closeButtons = document.querySelectorAll('.close');
+      
+              openModalButtons.forEach(button => {
+                  button.addEventListener('click', function () {
+                      const userId = this.getAttribute('data-user-id');
+                      const modal = document.getElementById(`myModal_${userId}`);
+                      modal.style.display = 'block';
+                  });
+              });
+      
+              closeButtons.forEach(button => {
+                  button.addEventListener('click', function () {
+                      const userId = this.getAttribute('data-user-id');
+                      const modal = document.getElementById(`myModal_${userId}`);
+                      modal.style.display = 'none';
+                  });
+              });
+          });
+      </script>
+      
+    </table>
+</table>
+  
+</main>
+<%- include ('../partials/footer') %>

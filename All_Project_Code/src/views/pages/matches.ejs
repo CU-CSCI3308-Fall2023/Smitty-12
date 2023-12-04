@@ -1,13 +1,24 @@
 <%- include ('../partials/header') %> <%- include ('../partials/menu') %>
 
-<main>
-<h4> People who liked your post:</h4>
-<hr>
-<form class = "formcontainer" action = "/liked_you" method="GET">
-
-
-</form>
-</main>
-
+<div class="m-5">
+    <main>
+        <h4> Your matches:</h4>
+        <hr>
+        <form class = "formcontainer" action = "/liked_you" method="GET">
+        
+        
+        </form>
+        <br>
+        <br>
+        <h4> People who liked your profile:</h4>
+        <hr>
+        <form class = "formcontainer" action = "/liked_back" method="GET">
+        
+        
+        
+        </form>
+        </main>
+        
+</div>
 
 <%- include ('../partials/footer') %>
