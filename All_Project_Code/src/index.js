@@ -392,7 +392,7 @@ app.get('/liked_you', async (req, res) => {
 
 app.get("/logout", (req, res) => {
     req.session.destroy();
-    res.render("pages/logout");
+    res.render("pages/home");
 });
 
 // *****************************************************
