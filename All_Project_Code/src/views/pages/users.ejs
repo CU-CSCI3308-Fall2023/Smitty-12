@@ -97,8 +97,9 @@
                                 </ul>
                               </div>
                           </div>
-                          <form action="/liked_back">
-                            <button type="submit" action="/liked_back">Like</button>
+                          <form action="/save_and_refresh" method="POST">
+                            <input type="hidden" name="liked_id" value="<%= result.user_id %>" />
+                            <button type="submit">Like</button>
                           </form>
                       </div>
                   </div>

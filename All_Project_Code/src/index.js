@@ -92,7 +92,7 @@ app.get("/preferences", (req, res) => {
 app.get("/matches", async (req, res) => {
     var likes_you_data_original = await db.any(`select distinct users.username, users.user_id, users.first_name, users.last_name from users inner join matches ON matches.liker_user_id=users.user_id where matches.liked_user_id=${req.session.user.user_id}`);
     let matches = await db.any(`SELECT DISTINCT u.username, u.user_id, u.first_name, u.last_name FROM users u WHERE u.user_id IN ( SELECT DISTINCT m1.liker_user_id AS user_id FROM matches m1 INNER JOIN matches m2 ON m1.liker_user_id = m2.liked_user_id AND m1.liked_user_id = m2.liker_user_id WHERE (m1.liked_user_id = ${req.session.user.user_id} AND m1.liker_user_id = u.user_id) AND (m2.liker_user_id = ${req.session.user.user_id} AND m2.liked_user_id = u.user_id) )`)
-    
+
     var likes_you_data = []
 
     likes_you_data_original.forEach(data_entry => {
