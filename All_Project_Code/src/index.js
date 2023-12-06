@@ -144,19 +144,34 @@ app.post('/register', async (req, res) => {
     try {
         // Hash the password using bcrypt library
         const hash = await bcrypt.hash(req.body.password, 10);
-
+        const age = req.body.age;
         if (hash) {
+            // Fetch the current maximum user_id
+            const maxUserId = await db.one('SELECT MAX(user_id) FROM users');
+            const newUserId = maxUserId.max + 1;
+
+            // Insert into preferences using the new preferences_id
+            const queryTwo = `
+                INSERT INTO preferences (preferences_id, age_range, sex, pets, budget)
+                VALUES ($1, $2, $3, $4, $5)
+            `;
+            const queryTwoParams = [newUserId, age, "nopref", 0, 1000];
+
+            await db.any(queryTwo, queryTwoParams);
+
+            // Insert into users with the new user_id and preferences_id
             const query = `
                 INSERT INTO users (
-                    username, password, first_name, last_name, bio, 
+                    user_id, username, password, first_name, last_name, bio, 
                     location, age, photo_id, preferences_id
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             `;
 
             const queryParams = [
+                newUserId, // Use the new user_id here
                 req.body.username, hash, req.body.first_name, req.body.last_name,
                 req.body.bio, req.body.location, req.body.age, req.body.photo_id,
-                req.body.preferences_id
+                newUserId  // Use the new user_id here
             ];
 
             await db.any(query, queryParams);
@@ -170,6 +185,9 @@ app.post('/register', async (req, res) => {
         res.redirect('/register');
     }
 });
+
+
+
 
 // app.post('/make_profile', async (req, res) => {
 //     // Assuming you have a session with user information, and the user ID is stored in req.session.userId
