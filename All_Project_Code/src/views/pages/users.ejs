@@ -69,11 +69,11 @@
             <th>PEOPLE</th>
         </tr>
         <% results.forEach(result => { %>
+        <body>
           <tr>
               <td><%= result.first_name %></td>
-              <body>
                   <!-- Trigger/Open The Modal -->
-                  <button class="openModalBtn" data-user-id="<%= result.user_id %>">Open Modal</button>
+                  <td><button class="openModalBtn" data-user-id="<%= result.user_id %>">Open Modal</button></td>
                 
                   <!-- The Modal -->
                   <div id="myModal_<%= result.user_id %>" class="modal">
@@ -89,16 +89,18 @@
                                   <hr>
                                   <p><%= result.bio %></p>
                                   <ul>
-                                      <li>Age-Range: <%= result.first_name %></li>
-                                      <li>Location:</li>
-                                      <li>Sex:</li>
-                                      <li>Pets:</li>
-                                  </ul>
+                                    <li>Age-Range: <%= result.age_range ? result.age_range : 'Not specified' %></li>
+                                    <li>Location: <%= result.location ? result.location : 'Not specified' %></li>
+                                    <li>Sex: <%= result.sex ? result.sex : 'Not specified' %></li>
+                                    <li>Pets: <%= result.pets ? result.pets : 'Not specified' %></li>
+                                    <li>Budget: <%= result.budget ? result.budget : 'Not specified' %></li>
+                                </ul>
                               </div>
-                              <form action="/liked_back">
-                                <button type="submit" action="/liked_back">Like</button>
-                              </form>
                           </div>
+                          <form action="/save_and_refresh" method="POST">
+                            <input type="hidden" name="liked_id" value="<%= result.user_id %>" />
+                            <button type="submit">Like</button>
+                          </form>
                       </div>
                   </div>
               </body>

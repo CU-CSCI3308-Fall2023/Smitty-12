@@ -89,8 +89,31 @@ app.get("/preferences", (req, res) => {
     res.render("pages/create");
 });
 
-app.get("/matches", (req, res) => {
-    res.render("pages/matches");
+app.get("/matches", async (req, res) => {
+    var likes_you_data_original = await db.any(`select distinct users.username, users.user_id, users.first_name, users.last_name from users inner join matches ON matches.liker_user_id=users.user_id where matches.liked_user_id=${req.session.user.user_id}`);
+    let matches = await db.any(`SELECT DISTINCT u.username, u.user_id, u.first_name, u.last_name FROM users u WHERE u.user_id IN ( SELECT DISTINCT m1.liker_user_id AS user_id FROM matches m1 INNER JOIN matches m2 ON m1.liker_user_id = m2.liked_user_id AND m1.liked_user_id = m2.liker_user_id WHERE (m1.liked_user_id = ${req.session.user.user_id} AND m1.liker_user_id = u.user_id) AND (m2.liker_user_id = ${req.session.user.user_id} AND m2.liked_user_id = u.user_id) )`)
+
+    var likes_you_data = []
+
+    likes_you_data_original.forEach(data_entry => {
+        var append = true
+        matches.forEach(data => {
+            if (data.user_id === data_entry.user_id) {
+                console.log("ALREADU MATCHES")
+                append = false
+            }
+        })
+
+        if (append) {
+            likes_you_data.push(data_entry)
+        }
+    })
+
+    console.log(likes_you_data);
+    console.log(matches);
+
+
+    res.render("pages/matches", data={likes_you: likes_you_data, matched_with: matches});
 });
 
 //Register
@@ -213,7 +236,7 @@ const auth = (req, res, next) => {
 };
 
 // Authentication Required
-// app.use(auth);
+app.use(auth);
 
 // app.get('/discover', (req, res) => {
 //     axios({
@@ -240,16 +263,19 @@ const auth = (req, res, next) => {
 
 app.get('/users', async (req, res) => {
     try {
-        const query = 'SELECT * FROM users';
-        const allUsers = await db.any(query);
+        const query = 'SELECT * FROM users LEFT JOIN preferences ON users.preferences_id = preferences.preferences_id';
+        const usersWithPrefs = await db.any(query);
 
-        // Render or send the allUsers data as needed
-        res.render('pages/users', { results: allUsers });
+        console.log(usersWithPrefs);  // Add this line to log the data
+
+        res.render('pages/users', { results: usersWithPrefs });
     } catch (error) {
         console.error('Error fetching all users:', error);
         res.status(500).send('Internal Server Error');
     }
 });
+
+
 
 app.get('/discover', async (req, res) => {
     const currentUserId = req.session.user.user_id;
@@ -300,6 +326,35 @@ app.get('/user/:userId', async (req, res) => {
     }
 });
 
+app.post('/save_and_refresh',async(req,res) => {
+    try {
+        /*
+
+        Database Structure: 
+            CREATE TABLE IF NOT EXISTS matches (
+            liked_user_id INT,
+            liker_user_id INT
+            );
+        
+        Person liking: liker_id
+        Person being liked: liked_id
+
+        res.session.user.id
+
+        */
+
+        console.log("Liked id: ", req.body.liked_id)
+        console.log(req.session.user)
+
+        let liked_id = req.body.liked_id
+        let liker_id = req.session.user.user_id
+
+        await db.query(`INSERT INTO matches (liked_user_id, liker_user_id) values ( ${liked_id} , ${liker_id})`)
+        res.redirect('/users')
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 // this section is for when someone likes you, you can see it and decide to like them back or not
 app.get('/liked_you', async (req, res) => {
@@ -307,11 +362,11 @@ app.get('/liked_you', async (req, res) => {
   
     try {
       const likedYouUserIds = await db.any(
-        `SELECT * FROM matches WHERE user_id_to = ${currentUserId}`
-      );
+        `SELECT * FROM matches WHERE liker_user_id = ${currentUserId}`
+      )
   
       res.render('pages/matches', { results: likedYouUserIds });
-      console.log(likedYouUserIds);
+      console.log("YOULIKED", likedYouUserIds);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });
@@ -320,14 +375,22 @@ app.get('/liked_you', async (req, res) => {
 
   // this is for the matches section where theres a both users like each other.
   app.get("/liked_back", async (req, res) => {
-    const currentUserId = req.session.user.user_id;
+    const currentUserId = req.session.user.user_id;    
 
     try {
+        const youLiked = await db.any(
+            `SELECT * FROM matches WHERE liker_user_id = ${currentUserId}`
+          )
+
         const likedYouUserIds = await db.any(
             `SELECT liker_user_id FROM matches WHERE liked_user_id = $1`,
             [currentUserId]
         );
-        console.log(likedYouUserIds);
+
+        const intersection = youLiked.filter(element => likedYouUserIds.includes(element))
+        console.log("INT", intersection)
+        console.log("LIKED YOU", likedYouUserIds);
+        `SELECT * FROM users WHERE user_id in `
         res.render('pages/matches', { results: likedYouUserIds });
     } catch (error) {
         console.error(error);
