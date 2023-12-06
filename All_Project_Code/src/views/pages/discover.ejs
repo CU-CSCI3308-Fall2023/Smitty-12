@@ -87,7 +87,7 @@
         
         sortedResults.forEach(result => { 
       %>
-      <% if (((result.dob.age === preferences.age_range) || (preferences.age_range >= 18 && preferences.age_range <= 21 && result.dob.age > preferences.age_range && result.dob.age <= preferences.age_range + 5) || (preferences.age_range > 21 && result.dob.age > preferences.age_range - 3 && result.dob.age <= preferences.age_range + 5)) && (preferences.sex === result.gender || preferences.sex === 'No Preference')) { %>
+      <% if (((result.dob.age === preferences.age_range) || (preferences.age_range >= 18 && preferences.age_range <= 21 && result.dob.age > preferences.age_range && result.dob.age <= preferences.age_range + 5) || (preferences.age_range > 21 && result.dob.age > preferences.age_range - 3 && result.dob.age <= preferences.age_range + 5)) && (preferences.sex === result.gender || preferences.sex === 'nopref')) { %>
         <tr>
               <td><%= result.name.first %></td>
               <td>
