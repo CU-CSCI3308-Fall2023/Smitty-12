@@ -70,11 +70,28 @@
         <tr>
             <th>PEOPLE</th>
         </tr>
-        <% results.forEach(result => { %>
-          <tr>
+        <% 
+        // Sort the results array by age, with priority given to matching age
+        const sortedResults = results.sort((a, b) => {
+          const ageDifferenceA = Math.abs(a.dob.age - preferences.age_range);
+          const ageDifferenceB = Math.abs(b.dob.age - preferences.age_range);
+
+          if (ageDifferenceA === ageDifferenceB) {
+            // If age difference is the same, prioritize younger users
+            return a.dob.age - b.dob.age;
+          }
+
+          // Sort by proximity to preferences.age_range
+          return ageDifferenceA - ageDifferenceB;
+        });
+        
+        sortedResults.forEach(result => { 
+      %>
+      <% if (((result.dob.age === preferences.age_range) || (preferences.age_range >= 18 && preferences.age_range <= 21 && result.dob.age > preferences.age_range && result.dob.age <= preferences.age_range + 5) || (preferences.age_range > 21 && result.dob.age > preferences.age_range - 3 && result.dob.age <= preferences.age_range + 5)) && (preferences.sex === result.gender || preferences.sex === 'No Preference')) { %>
+        <tr>
               <td><%= result.name.first %></td>
               <td>
-                <button class="openModalBtn" data-user-id="<%= result.user_id %>" onclick="openModal('<%= result.name.first %>', '<%= result.name.last %>', '<%= result.dob.age %>', '<%= result.location.city %>', '<%= result.location.country %>', '<%= result.gender %>', '<%= result.picture.large %>', '<%= result.email %>')">Open Modal</button>
+                <button class="openModalBtn" data-user-id="<%= result.user_id %>" onclick="openModal('<%= result.name.first %>', '<%= result.name.last %>', '<%= result.dob.age %>', '<%= result.location.city %>', '<%= result.location.country %>', '<%= result.gender %>', '<%= result.picture.large %>', '<%= result.email %>')">See User</button>
               </td>
                   <!-- Trigger/Open The Modal -->
                   
@@ -131,10 +148,15 @@
                       </div>
                   </div>
           </tr>
-      <% }) %>
+          <% } %>
+          <% }) %>
     </body>
       
       <script>
+         function refreshPage() {
+          location.reload();
+          }
+
         function openModal(firstName, lastName, age, city, country, gender, pic, email) {
         document.getElementById('first').innerHTML = firstName;
         document.getElementById('last').innerHTML = lastName;
@@ -183,6 +205,10 @@
       
     </table>
 </table>
+
+<div>
+  <button onclick="refreshPage()">More Users</button>
+</div>
   
 </main>
 <%- include ('../partials/footer') %>

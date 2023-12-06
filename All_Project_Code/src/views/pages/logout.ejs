@@ -1,10 +1,30 @@
-<%- include ('../partials/header') %> <%- include ('../partials/menu') %>
+<%- include ('../partials/header') %>
+<%- include ('../partials/menu') %>
 
 <main>
   <div class="container">
-    <!-- THE REST OF YOUR HTML CODE GOES HERE -->
-    <h1>Logout Complete</h1>
+    <!-- Your existing HTML code goes here -->
+    <h1 style="text-align: center;color: #ff3b3f;">Logout Complete</h1>
+
+    <!-- Centered text with buttons on either side -->
+    <div style="text-align: center;">
+      <button onclick="redirectToRegister()" style="margin-right: 10px;">Back to Register</button>
+      <button onclick="redirectToLogin()">Back to Login</button>
+    </div>
   </div>
 </main>
 
 <%- include ('../partials/footer') %>
+
+<script>
+  // JavaScript functions to redirect to register and login pages
+  function redirectToRegister() {
+    // Replace '/register' with the actual path to your register page
+    window.location.href = '/register';
+  }
+
+  function redirectToLogin() {
+    // Replace '/login' with the actual path to your login page
+    window.location.href = '/login';
+  }
+</script>

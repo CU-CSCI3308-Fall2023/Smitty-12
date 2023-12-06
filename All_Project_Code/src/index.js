@@ -278,6 +278,7 @@ app.get('/users', async (req, res) => {
 
 
 app.get('/discover', async (req, res) => {
+    const currentUserId = req.session.user.user_id;
     try {
         // Append a timestamp to the API request URL
         const timestamp = new Date().getTime();
@@ -290,8 +291,15 @@ app.get('/discover', async (req, res) => {
         const userData = response.data.results;
         console.log(userData);
 
+        // Extract data from preferences
+        const userPreferences = await db.oneOrNone('SELECT * FROM preferences WHERE preferences_id =  (SELECT preferences_id FROM users WHERE user_id = $1)', [currentUserId]); 
+        console.log(userPreferences);
+        console.log(currentUserId);
+
         // Send the data back to the client
-        res.render('pages/discover', { results: userData });
+        res.render('pages/discover', {preferences: userPreferences, results: userData});
+      
+        
     } catch (error) {
         // Handle any errors that might occur during the request
         console.error('Error fetching data:', error.message);
