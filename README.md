@@ -56,5 +56,5 @@ Now, making sure you are in the correct directory, you can start the application
 ## Link to deployed application
 
 ```bash
-    **PUT LINK HERE**
+    http://recitation-12-team-01.westus3.cloudapp.azure.com:3000/
 ```
