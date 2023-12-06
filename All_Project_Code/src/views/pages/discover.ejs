@@ -87,11 +87,11 @@
         
         sortedResults.forEach(result => { 
       %>
-      <% if (((result.dob.age === preferences.age_range) || (preferences.age_range >= 18 && preferences.age_range <= 21 && result.dob.age > preferences.age_range && result.dob.age <= preferences.age_range + 5) || (preferences.age_range > 21 && result.dob.age > preferences.age_range - 3 && result.dob.age <= preferences.age_range + 3)) && (preferences.sex === result.gender || preferences.sex === 'nopref')) { %>
+      <% if (((result.dob.age === preferences.age_range) || (preferences.age_range >= 18 && preferences.age_range <= 21 && result.dob.age > preferences.age_range && result.dob.age <= preferences.age_range + 5) || (preferences.age_range > 21 && result.dob.age > preferences.age_range - 3 && result.dob.age <= preferences.age_range + 5)) && (preferences.sex === result.gender || preferences.sex === 'No Preference')) { %>
         <tr>
               <td><%= result.name.first %></td>
               <td>
-                <button class="openModalBtn" data-user-id="<%= result.user_id %>" onclick="openModal('<%= result.name.first %>', '<%= result.name.last %>', '<%= result.dob.age %>', '<%= result.location.city %>', '<%= result.location.country %>', '<%= result.gender %>', '<%= result.picture.large %>', '<%= result.email %>')">Open Modal</button>
+                <button class="openModalBtn" data-user-id="<%= result.user_id %>" onclick="openModal('<%= result.name.first %>', '<%= result.name.last %>', '<%= result.dob.age %>', '<%= result.location.city %>', '<%= result.location.country %>', '<%= result.gender %>', '<%= result.picture.large %>', '<%= result.email %>')">See User</button>
               </td>
                   <!-- Trigger/Open The Modal -->
                   
@@ -114,10 +114,6 @@
                                         <p>First Name: </p>
                                         <p id ="first"><%= result.name.first %> </p>
                                     </div>
-                                    <div class="d-flex flex-row">
-                                      <p>preferenced age: </p>
-                                      <p id ="first"><%= preferences.age_range %> </p>
-                                  </div>
                                     <div class="d-flex flex-row">
                                         <p>Last Name: </p>
                                         <p id ="last"> <%= result.name.last %> </p>
@@ -157,6 +153,10 @@
     </body>
       
       <script>
+         function refreshPage() {
+          location.reload();
+          }
+
         function openModal(firstName, lastName, age, city, country, gender, pic, email) {
         document.getElementById('first').innerHTML = firstName;
         document.getElementById('last').innerHTML = lastName;
@@ -205,6 +205,10 @@
       
     </table>
 </table>
+
+<div>
+  <button onclick="refreshPage()">More Users</button>
+</div>
   
 </main>
 <%- include ('../partials/footer') %>
