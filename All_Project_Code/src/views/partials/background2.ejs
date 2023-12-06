@@ -1,0 +1,80 @@
+   <style>
+        .background{
+            width: 100%;
+            height: 100%;
+            position: absolute; 
+            top: 0;
+            left: 0;
+            background-color: transparent;
+           
+        }
+    </style>
+    
+    <!-- Temp test line -->
+    <div style="color:blue; overflow:clip" class="background"><svg id="liner" height="100%" width="100%"></svg></div>
+
+    <!--Calling animation Library-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js" integrity="sha512-aNMyYYxdIxIaot0Y1/PLuEu3eipGCmsEUBrUq+7aVyPGMFH8z0eTP0tkqAvv34fzN6z+201d3T8HPb1svWSKHQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        const line = document.getElementById("liner")
+            // <line x1="0" y1="0" x2="3000" y2="3000" style="stroke:rgb(255,0,0);stroke-width:2" />
+             const xoffset = 200
+             const yoffset = 200
+
+        // Lines forom second quadrant to fourth quadrant
+        for(let i = 0 ; i <= 16; i++)
+            {
+
+                let n = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                console.log(n)
+                n.setAttribute('x1', `${i*xoffset - 1600}`);
+                n.setAttribute('y1', '0');
+                n.setAttribute('x2', `${3000 + (i*(1.8*xoffset))}`);
+                n.setAttribute('y2', `${3000 + (i*yoffset)}`);
+                n.setAttribute('stroke', '#FF6B6B');
+                n.setAttribute('stroke-width', '2');
+                
+
+                // Visualizer
+                // n.x1 = "${i*10}"
+                //<line x1={`${i*10}`} y1="0" x2={`${3000 + (i*10)}`} y2={`${3000 + (i*10)}`} style="stroke:rgb(255,0,0);stroke-width:2" />
+                line.appendChild(n)
+            }
+        // Lines from 
+        for(let i = 0 ; i <= 16; i++)
+            {
+                let n = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                console.log(n)
+                n.setAttribute('x1', `${1.2*i*xoffset - 0}`);
+                n.setAttribute('y1', '0');
+                n.setAttribute('x2', `${-(3000 + (i*(1.8*xoffset)))}`);
+                n.setAttribute('y2', `${3000 + (i*yoffset)}`);
+                n.setAttribute('stroke', '#FF6B6B');
+                n.setAttribute('stroke-width', '2');
+                line.appendChild(n)
+            }
+            var pathEls = document.querySelectorAll('line');
+            for (var i = 0; i < pathEls.length; i++) {
+            var pathEl = pathEls[i];
+            var offset = anime.setDashoffset(pathEl);
+            pathEl.setAttribute('stroke-dashoffset', offset);
+            anime({
+                targets: pathEl,
+                strokeDashoffset: [offset, 0],
+                duration: anime.random(2000, 30000),
+                delay: anime.random(0, 2000),
+                loop: true,
+                direction: 'alternate',
+                easing: 'easeInSine',
+                autoplay: true,
+                
+                }
+                );
+                }
+               
+                
+    </script>
+    
+
+    

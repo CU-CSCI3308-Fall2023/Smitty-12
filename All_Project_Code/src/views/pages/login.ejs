@@ -1,5 +1,5 @@
 <!-- login.ejs -->
-
+<%- include ('../partials/background2') %> 
 <%- include ('../partials/header') %> 
 <%- include ('../partials/menu') %>
 
@@ -43,7 +43,7 @@
 </style>
 
 <main>
-    <div class="container" id = "loginContainer">
+    <div style="position: relative;"  class="container" id = "loginContainer">
         <h1>Login</h1>
         <form action="/login" method="post">
             <div class="mb-3">
