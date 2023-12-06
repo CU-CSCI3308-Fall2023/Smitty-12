@@ -1,5 +1,5 @@
 <!-- register.ejs -->
-
+<%- include ('../partials/background2') %> 
 <%- include ('../partials/header') %> 
 <%- include ('../partials/menu') %>
 
@@ -38,7 +38,7 @@
 </style>
 
 <main>
-    <div id="registerContainer">
+    <div style="position: relative;"  id="registerContainer">
         <h1>Register</h1>
         <form action="/register" method="POST">
             <div class="mb-3">
